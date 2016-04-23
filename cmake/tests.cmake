@@ -1,5 +1,16 @@
 if (NOT EXISTS "${PROJECT_SOURCE_DIR}/../gmock/CMakeLists.txt")
-  message(FATAL_ERROR "Cannot find gmock directory.")
+  set(gmockBuildDir ${protobuf_source_dir}/gmock)
+  #file(DOWNLOAD "https://googlemock.googlecode.com/files/gmock-1.7.0.zip" ${protobuf_source_dir}/gmock.zip STATUS status SHOW_PROGRESS)
+  #message(STATUS "Status=${status}")
+  message(STATUS "gmockBuildDir=${gmockBuildDir}")
+  execute_process(COMMAND curl -s -O https://googlemock.googlecode.com/files/gmock-1.7.0.zip
+    COMMAND unzip -o gmock-1.7.0.zip
+    COMMAND mv gmock-1.7.0/ ${gmockBuildDir}
+    #COMMAND rm gmock-1.7.0.zip
+    )
+  if (NOT EXISTS "${PROJECT_SOURCE_DIR}/../gmock/CMakeLists.txt")
+    message(FATAL_ERROR "Cannot find gmock directory and download attempt failed!")
+  endif()
 endif()
 
 option(protobuf_ABSOLUTE_TEST_PLUGIN_PATH
